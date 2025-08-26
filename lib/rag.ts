@@ -133,23 +133,86 @@ function findMatchingWorks(question: string): RamchalWork[] {
 }
 
 /**
- * Generate witness references from matched works with ±2 chapter walking
+ * Find most relevant chapters within a work based on question keywords
  */
-function generateWitnessRefs(matchedWorks: RamchalWork[]): string[] {
+function findRelevantChapters(work: RamchalWork, question: string): RamchalChapter[] {
+  const normalizedQuestion = question.toLowerCase()
+  const relevantChapters: { chapter: RamchalChapter; score: number }[] = []
+  
+  // Collect all chapters from the work
+  const allChapters: RamchalChapter[] = []
+  if (work.chapters) {
+    allChapters.push(...work.chapters)
+  } else if (work.parts) {
+    for (const part of work.parts) {
+      allChapters.push(...part.chapters)
+    }
+  }
+  
+  // Score each chapter based on topic relevance
+  for (const chapter of allChapters) {
+    let score = 0
+    
+    // Check if chapter title matches question keywords
+    if (normalizedQuestion.includes(chapter.title.toLowerCase())) {
+      score += 15
+    }
+    
+    // Check if any topic in the chapter matches question keywords
+    for (const topic of chapter.topics) {
+      if (normalizedQuestion.includes(topic.toLowerCase())) {
+        score += 10
+      }
+    }
+    
+    if (score > 0) {
+      relevantChapters.push({ chapter, score })
+    }
+  }
+  
+  // Sort by relevance and return top chapters
+  return relevantChapters
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.chapter)
+    .slice(0, 4) // Top 4 most relevant chapters per work
+}
+
+/**
+ * Generate witness references from matched works with smart chapter selection
+ */
+function generateWitnessRefs(matchedWorks: RamchalWork[], question: string): string[] {
   const witnessRefs = new Set<string>()
   
   for (const work of matchedWorks) {
     if (work.structure === 'simple_chapters' && work.chapters) {
-      // For simple chapter works (like Mesillat Yesharim), add 2-3 chapters
-      const chaptersToAdd = Math.min(3, work.chapters.length)
-      for (let i = 0; i < chaptersToAdd; i++) {
-        witnessRefs.add(work.chapters[i].tref)
+      // For simple chapter works, try to find relevant chapters first
+      const relevantChapters = findRelevantChapters(work, question)
+      if (relevantChapters.length > 0) {
+        // Add relevant chapters
+        for (const chapter of relevantChapters) {
+          witnessRefs.add(chapter.tref)
+        }
+      } else {
+        // Fallback: add first 2-3 chapters
+        const chaptersToAdd = Math.min(3, work.chapters.length)
+        for (let i = 0; i < chaptersToAdd; i++) {
+          witnessRefs.add(work.chapters[i].tref)
+        }
       }
     } else if (work.structure === 'complex_parts' && work.parts) {
-      // For complex works (like Derekh Hashem), add key chapters from each part
-      for (const part of work.parts.slice(0, 2)) { // Limit to first 2 parts
-        for (const chapter of part.chapters.slice(0, 2)) { // Limit to first 2 chapters per part
+      // For complex works, prioritize relevant chapters across all parts
+      const relevantChapters = findRelevantChapters(work, question)
+      if (relevantChapters.length > 0) {
+        // Add relevant chapters from any part
+        for (const chapter of relevantChapters) {
           witnessRefs.add(chapter.tref)
+        }
+      } else {
+        // Fallback: add key chapters from first 2 parts
+        for (const part of work.parts.slice(0, 2)) {
+          for (const chapter of part.chapters.slice(0, 2)) {
+            witnessRefs.add(chapter.tref)
+          }
         }
       }
     } else if (work.tref) {
@@ -202,11 +265,11 @@ function generateGuessRefs(question: string): string[] {
       ramchalIndex.works.daat_tevunot as RamchalWork
     ].filter(Boolean)
     
-    return generateWitnessRefs(defaultWorks)
+    return generateWitnessRefs(defaultWorks, question)
   }
   
   // Generate base witnesses from matched works
-  const baseRefs = generateWitnessRefs(matchedWorks)
+  const baseRefs = generateWitnessRefs(matchedWorks, question)
   
   // Add adjacent chapters for deeper exploration
   const allRefs = addAdjacentChapters(baseRefs, matchedWorks)
