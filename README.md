@@ -7,6 +7,7 @@ A Next.js application for exploring the teachings of Rabbi Moshe Chaim Luzzatto 
 - **Interactive Chat Interface**: Ask questions about Ramchal's teachings
 - **RAG Pipeline**: Retrieval-Augmented Generation with precise source citations
 - **Citation Verification**: Automatic verification of AI-generated answers
+- **Rich Text Rendering**: Full markdown support with Hebrew RTL detection
 - **Comprehensive Text Index**: JSON-based indexing of all major Ramchal works
 - **Sefaria Integration**: Direct access to authenticated Sefaria texts
 - **Version Selection**: Choose from multiple English translations
