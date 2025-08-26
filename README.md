@@ -1,3 +1,23 @@
+# Ramhal Scholarship Platform
+
+A Next.js application for exploring the teachings of Rabbi Moshe Chaim Luzzatto (Ramchal) with AI-powered question answering.
+
+## Features
+
+- **Interactive Chat Interface**: Ask questions about Ramchal's teachings
+- **RAG Pipeline**: Retrieval-Augmented Generation with precise source citations
+- **Citation Verification**: Automatic verification of AI-generated answers
+- **Comprehensive Text Index**: JSON-based indexing of all major Ramchal works
+- **Sefaria Integration**: Direct access to authenticated Sefaria texts
+- **Version Selection**: Choose from multiple English translations
+
+## Major Works Included
+
+- **Mesillat Yesharim** (Path of the Just) - Complete 10-chapter ethical guide
+- **Derekh Hashem** (The Way of God) - Systematic Jewish theology in 4 parts
+- **Da'at Tevunot** (Knowledge of Understanding) - Dialogue on divine providence
+- **Other Works**: Kalach Pitchei Chokhmah, Sefer HaHiggayon, and more
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
