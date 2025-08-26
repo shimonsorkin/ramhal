@@ -175,7 +175,7 @@ export default function ChatPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="text-xl font-semibold text-gray-900">Answer</h2>
-                  <div className="mt-1 text-sm text-gray-500">
+                  <div className="mt-1 text-sm text-gray-700">
                     Based on {result.metadata.witnessCount} passages • 
                     {result.metadata.tokensUsed} tokens • 
                     {result.metadata.model}
@@ -186,7 +186,7 @@ export default function ChatPage() {
                     <div className="text-sm font-medium text-gray-700">
                       Citation Accuracy
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-700">
                       {result.verification.sourcedSentences}/{result.verification.totalSentences} sentences 
                       ({result.verification.accuracy.toFixed(0)}%)
                     </div>

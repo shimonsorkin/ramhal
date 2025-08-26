@@ -110,20 +110,22 @@ export default function RichContent({
       className={cn(
         // Base prose styling with Tailwind Typography
         'prose max-w-none',
+        // Force black text for better readability
+        'text-black prose-p:text-black prose-li:text-black prose-td:text-black prose-th:text-black',
         // Enhanced styling for better readability
-        'prose-headings:font-semibold prose-headings:text-gray-900',
+        'prose-headings:font-semibold prose-headings:text-black',
         'prose-pre:rounded-xl prose-pre:bg-gray-900',
-        'prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic',
-        'prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm',
+        'prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-black',
+        'prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:text-black',
         'prose-a:text-blue-600 hover:prose-a:text-blue-800',
         // List styling
         'prose-ul:list-disc prose-ol:list-decimal',
-        'prose-li:marker:text-gray-500',
+        'prose-li:marker:text-gray-600',
         // Table styling
         'prose-table:border-collapse prose-th:border prose-th:border-gray-300 prose-th:bg-gray-50 prose-th:p-2',
         'prose-td:border prose-td:border-gray-300 prose-td:p-2',
         // Strong/bold styling
-        'prose-strong:font-semibold prose-strong:text-gray-900',
+        'prose-strong:font-semibold prose-strong:text-black',
         // Custom class
         className
       )}
