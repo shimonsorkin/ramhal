@@ -615,7 +615,7 @@ export default function DemoPage() {
                         <div className="text-sm text-red-600">Use default version selection</div>
                       </button>
                     )}
-                    {versions.map((version, index) => (
+                    {versions.map((version) => (
                       <button
                         key={version.versionTitle}
                         onClick={() => handleVersionSelect(version.versionTitle)}

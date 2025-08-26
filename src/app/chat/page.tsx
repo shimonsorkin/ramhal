@@ -92,7 +92,7 @@ export default function ChatPage() {
     const trefPattern = /\(([^)]+)\)/g
     const parts = []
     let lastIndex = 0
-    let match
+    let match: RegExpExecArray | null
 
     while ((match = trefPattern.exec(answerText)) !== null) {
       // Add text before the match
@@ -103,7 +103,7 @@ export default function ChatPage() {
           const warningParts = textSegment.split('⚠️')
           warningParts.forEach((part, idx) => {
             if (idx > 0) {
-              parts.push(<span key={`warning-${match.index}-${idx}`} className="text-orange-600 font-semibold">⚠️</span>)
+              parts.push(<span key={`warning-${match!.index}-${idx}`} className="text-orange-600 font-semibold">⚠️</span>)
             }
             if (part) parts.push(part)
           })
@@ -112,12 +112,12 @@ export default function ChatPage() {
         }
       }
 
-      const trefText = match[1]
+      const trefText = match![1]
       
       // Handle special case for "(Needs source)" in verified mode
       if (trefText === 'Needs source' && isVerified) {
         parts.push(
-          <span key={match.index} className="text-orange-600 text-sm font-medium">(Needs source)</span>
+          <span key={match!.index} className="text-orange-600 text-sm font-medium">(Needs source)</span>
         )
       } else {
         const witness = witnesses.find(w => w.tref === trefText)
@@ -126,7 +126,7 @@ export default function ChatPage() {
           // Clickable chip for valid tref
           parts.push(
             <button
-              key={match.index}
+              key={match!.index}
               onClick={() => setSelectedWitness(witness)}
               className="inline-flex items-center px-2 py-1 mx-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-full hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
             >
@@ -139,7 +139,7 @@ export default function ChatPage() {
         }
       }
 
-      lastIndex = match.index + match[0].length
+      lastIndex = match!.index + match![0].length
     }
 
     // Add remaining text
@@ -159,7 +159,7 @@ export default function ChatPage() {
               Ask Ramchal
             </h1>
             <p className="text-gray-600">
-              Ask questions about Rabbi Moshe Chaim Luzzatto's teachings and get answers sourced directly from his works.
+              Ask questions about Rabbi Moshe Chaim Luzzatto&apos;s teachings and get answers sourced directly from his works.
             </p>
           </div>
 
@@ -329,7 +329,7 @@ export default function ChatPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h3 className="mt-2 text-sm font-medium text-gray-900">Ask your first question</h3>
-            <p className="mt-1 text-sm text-gray-500">Get answers directly from Ramchal's writings.</p>
+            <p className="mt-1 text-sm text-gray-500">Get answers directly from Ramchal&apos;s writings.</p>
           </div>
         )}
       </div>

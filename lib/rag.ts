@@ -1,4 +1,4 @@
-import { getTextV3, SefariaTextResult } from './sefaria'
+import { getTextV3 } from './sefaria'
 import ramchalIndex from '../data/ramchal.json'
 
 export interface Witness {
