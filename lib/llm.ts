@@ -37,6 +37,11 @@ export async function synthesiseAnswer(
     throw new Error('At least one witness passage is required')
   }
 
+  // Check if user is asking for Hebrew text
+  const wantsHebrew = question.toLowerCase().includes('hebrew') || 
+                     question.toLowerCase().includes('original') ||
+                     question.toLowerCase().includes('lashon hakodesh')
+
   // Construct the system message with strict guidelines
   const systemMessage = `You may only answer using the provided Sefaria passages. When you use a passage, reference its tref inline in parentheses.
 
@@ -46,11 +51,22 @@ STRICT RULES:
 - Keep answer under 200 words
 - Be concise and direct
 - Do not add outside knowledge or interpretations
-- If the passages don't contain relevant information, say so clearly`
+- If the passages don't contain relevant information, say so clearly
+- When asked for Hebrew text, include the original Hebrew from the passages if available
+- If Hebrew text is requested but not available, state this clearly`
 
   // Format witnesses into numbered list for the prompt
   const witnessText = witnesses
-    .map((witness, index) => `[${index + 1}] ${witness.tref} — ${witness.text.substring(0, 500)}${witness.text.length > 500 ? '...' : ''}`)
+    .map((witness, index) => {
+      let content = `[${index + 1}] ${witness.tref} — ${witness.text.substring(0, 500)}${witness.text.length > 500 ? '...' : ''}`
+      
+      // Include Hebrew text if requested and available
+      if (wantsHebrew && witness.hebrew) {
+        content += `\n\nHebrew Original: ${witness.hebrew.substring(0, 500)}${witness.hebrew.length > 500 ? '...' : ''}`
+      }
+      
+      return content
+    })
     .join('\n\n')
 
   const userPrompt = `Question: ${question}

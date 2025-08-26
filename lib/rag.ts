@@ -4,6 +4,7 @@ import ramchalIndex from '../data/ramchal.json'
 export interface Witness {
   tref: string
   text: string
+  hebrew?: string
 }
 
 interface RamchalChapter {
@@ -288,19 +289,27 @@ async function fetchWitnesses(refs: string[]): Promise<Witness[]> {
   
   for (const ref of refs) {
     try {
-      const result = await getTextV3(ref, { lang: 'en' })
+      // Fetch bilingual text (both English and Hebrew)
+      const result = await getTextV3(ref, { lang: 'bi' })
       
-      // Extract text content
+      // Extract English text content
       let textContent = ''
       if (result.text) {
         textContent = Array.isArray(result.text) ? result.text.join(' ') : result.text
       }
       
-      // Only add if we have actual text content
+      // Extract Hebrew text content
+      let hebrewContent = ''
+      if (result.he) {
+        hebrewContent = Array.isArray(result.he) ? result.he.join(' ') : result.he
+      }
+      
+      // Only add if we have actual text content (at least English)
       if (textContent && textContent.trim().length > 0) {
         witnesses.push({
           tref: result.ref || ref,
-          text: textContent
+          text: textContent,
+          hebrew: hebrewContent && hebrewContent.trim().length > 0 ? hebrewContent : undefined
         })
       }
     } catch (error) {
