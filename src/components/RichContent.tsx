@@ -203,20 +203,25 @@ export default function RichContent({
           ),
           
           // Enhanced code block with better styling
-          code: (props) => {
-            const { className, children, ...restProps } = props as any
-            const inline = (restProps as any)?.inline as boolean | undefined
+          code: (props: React.ComponentPropsWithoutRef<'code'> & { inline?: boolean }) => {
+            const { className, children, inline, ...restProps } = props
             
             if (inline) {
               return (
-                <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono">
+                <code 
+                  {...restProps}
+                  className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono"
+                >
                   {children}
                 </code>
               )
             }
             
             return (
-              <code className={cn('font-mono text-sm', className)}>
+              <code 
+                {...restProps}
+                className={cn('font-mono text-sm', className)}
+              >
                 {children}
               </code>
             )
