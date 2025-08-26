@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { getCacheStats } from '../../../lib/sefaria'
+import RichContent from '../../components/RichContent'
 
 interface ApiResponse {
   ref: string
@@ -553,12 +554,9 @@ export default function DemoPage() {
               </div>
             </div>
             <div className="px-6 py-6">
-              <div 
-                className={`text-lg leading-relaxed ${
-                  result.lang === 'he' ? 'text-right font-hebrew' : 'text-left'
-                }`}
-                dir={result.lang === 'he' ? 'rtl' : 'ltr'}
-                dangerouslySetInnerHTML={{ __html: result.text }}
+              <RichContent 
+                content={result.text}
+                className={`prose-lg ${result.lang === 'he' ? 'text-right' : 'text-left'}`}
               />
             </div>
           </div>
@@ -658,6 +656,80 @@ export default function DemoPage() {
             </div>
           </div>
         )}
+        
+        {/* Rich Text Preview Example */}
+        <div className="bg-white rounded-lg shadow-sm border p-6 mt-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Rich Text Preview</h2>
+          <p className="text-gray-600 mb-4">
+            Test the rich content rendering with markdown, Hebrew text, and mixed formatting:
+          </p>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Input area */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rich Content Input
+              </label>
+              <textarea
+                className="w-full h-64 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none font-mono text-sm"
+                defaultValue={`# Heading
+
+**Bold** _italic_ ~~strikethrough~~
+
+> Quote block
+
+- list
+- items
+
+\`\`\`js
+console.log('code');
+\`\`\`
+
+<b>עניין התפלה</b> — Hebrew RTL paragraph: שלום עליכם
+
+[Link](https://example.com)`}
+                onChange={(e) => {
+                  // You could add state to make this interactive
+                  const preview = document.getElementById('rich-preview')
+                  if (preview) {
+                    preview.setAttribute('data-content', e.target.value)
+                  }
+                }}
+              />
+            </div>
+            
+            {/* Preview area */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Rendered Preview
+              </label>
+              <div 
+                id="rich-preview"
+                className="h-64 p-4 border border-gray-300 rounded-md bg-gray-50 overflow-y-auto"
+              >
+                <RichContent 
+                  content={`# Heading
+
+**Bold** _italic_ ~~strikethrough~~
+
+> Quote block
+
+- list  
+- items
+
+\`\`\`js
+console.log('code');
+\`\`\`
+
+<b>עניין התפלה</b> — Hebrew RTL paragraph: שלום עליכם
+
+[Link](https://example.com)`}
+                  className="prose-sm"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

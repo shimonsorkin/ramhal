@@ -12,10 +12,19 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.16",
+    "clsx": "^2.1.1",
     "next": "15.5.0",
     "openai": "^5.15.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "rehype-raw": "^7.0.0",
+    "rehype-sanitize": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "rtl-detect": "^1.1.2",
+    "tailwind-merge": "^3.3.1",
     "tiny-lru": "^11.4.5",
     "zod": "3.25.67"
   },

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import RichContent from '../../components/RichContent'
 
 interface Witness {
   tref: string
@@ -86,69 +87,6 @@ export default function ChatPage() {
     }
   }
 
-  // Extract tref references from answer text and make them clickable
-  const renderAnswerWithClickableRefs = (answerText: string, witnesses: Witness[], isVerified = false) => {
-    // Find all (tref) patterns in the answer
-    const trefPattern = /\(([^)]+)\)/g
-    const parts = []
-    let lastIndex = 0
-    let match: RegExpExecArray | null
-
-    while ((match = trefPattern.exec(answerText)) !== null) {
-      // Add text before the match
-      if (match.index > lastIndex) {
-        const textSegment = answerText.slice(lastIndex, match.index)
-        // Handle warning symbols in verified mode
-        if (isVerified && textSegment.includes('⚠️')) {
-          const warningParts = textSegment.split('⚠️')
-          warningParts.forEach((part, idx) => {
-            if (idx > 0) {
-              parts.push(<span key={`warning-${match!.index}-${idx}`} className="text-orange-600 font-semibold">⚠️</span>)
-            }
-            if (part) parts.push(part)
-          })
-        } else {
-          parts.push(textSegment)
-        }
-      }
-
-      const trefText = match![1]
-      
-      // Handle special case for "(Needs source)" in verified mode
-      if (trefText === 'Needs source' && isVerified) {
-        parts.push(
-          <span key={match!.index} className="text-orange-600 text-sm font-medium">(Needs source)</span>
-        )
-      } else {
-        const witness = witnesses.find(w => w.tref === trefText)
-        
-        if (witness) {
-          // Clickable chip for valid tref
-          parts.push(
-            <button
-              key={match!.index}
-              onClick={() => setSelectedWitness(witness)}
-              className="inline-flex items-center px-2 py-1 mx-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-full hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-colors"
-            >
-              {trefText}
-            </button>
-          )
-        } else {
-          // Non-clickable text for invalid trefs
-          parts.push(`(${trefText})`)
-        }
-      }
-
-      lastIndex = match!.index + match![0].length
-    }
-
-    // Add remaining text
-    if (lastIndex < answerText.length) {
-      parts.push(answerText.slice(lastIndex))
-    }
-
-    return parts
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -272,12 +210,14 @@ export default function ChatPage() {
                   </div>
                 </div>
               )}
-              <div className="text-lg leading-relaxed text-gray-900 mb-6">
-                {renderAnswerWithClickableRefs(
-                  verificationMode ? result.verifiedAnswer : result.answer, 
-                  result.witnesses, 
-                  verificationMode
-                )}
+              <div className="mb-6">
+                <RichContent 
+                  content={verificationMode ? result.verifiedAnswer : result.answer}
+                  className="prose-lg"
+                  witnesses={result.witnesses}
+                  onWitnessClick={setSelectedWitness}
+                  isVerified={verificationMode}
+                />
               </div>
               
               <div className="border-t pt-4">
@@ -314,9 +254,9 @@ export default function ChatPage() {
                 </button>
               </div>
               <div className="px-6 py-4 overflow-y-auto max-h-80">
-                <div
-                  className="text-sm leading-relaxed text-gray-700"
-                  dangerouslySetInnerHTML={{ __html: selectedWitness.text }}
+                <RichContent 
+                  content={selectedWitness.text}
+                  className="prose-sm"
                 />
               </div>
             </div>
