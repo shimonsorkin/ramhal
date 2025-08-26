@@ -1,0 +1,115 @@
+import OpenAI from 'openai'
+import { Witness } from './rag'
+
+// Lazy-initialize OpenAI client
+function getOpenAIClient(): OpenAI {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY environment variable is required')
+  }
+  
+  return new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+}
+
+export interface SynthesisResult {
+  answer: string
+  tokensUsed: number
+  model: string
+}
+
+/**
+ * Synthesize an answer to a question using provided witnesses from Sefaria texts
+ */
+export async function synthesiseAnswer(
+  question: string, 
+  witnesses: Witness[]
+): Promise<SynthesisResult> {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error('OPENAI_API_KEY environment variable is required')
+  }
+
+  if (!question || question.trim().length === 0) {
+    throw new Error('Question cannot be empty')
+  }
+
+  if (!witnesses || witnesses.length === 0) {
+    throw new Error('At least one witness passage is required')
+  }
+
+  // Construct the system message with strict guidelines
+  const systemMessage = `You may only answer using the provided Sefaria passages. When you use a passage, reference its tref inline in parentheses.
+
+STRICT RULES:
+- Only use information from the provided passages
+- Always cite sources with (tref) inline references
+- Keep answer under 200 words
+- Be concise and direct
+- Do not add outside knowledge or interpretations
+- If the passages don't contain relevant information, say so clearly`
+
+  // Format witnesses into numbered list for the prompt
+  const witnessText = witnesses
+    .map((witness, index) => `[${index + 1}] ${witness.tref} — ${witness.text.substring(0, 500)}${witness.text.length > 500 ? '...' : ''}`)
+    .join('\n\n')
+
+  const userPrompt = `Question: ${question}
+
+Passages from Ramchal's works:
+
+${witnessText}
+
+Please answer the question using only the information from these passages, citing sources with (tref) references inline.`
+
+  try {
+    const openai = getOpenAIClient()
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini', // Use the faster, cheaper model for this task
+      messages: [
+        {
+          role: 'system',
+          content: systemMessage
+        },
+        {
+          role: 'user', 
+          content: userPrompt
+        }
+      ],
+      max_tokens: 300, // Keep responses concise
+      temperature: 0.3, // Lower temperature for more focused, factual responses
+      top_p: 0.9,
+    })
+
+    const answer = completion.choices[0]?.message?.content
+    
+    if (!answer) {
+      throw new Error('No response generated from OpenAI')
+    }
+
+    return {
+      answer: answer.trim(),
+      tokensUsed: completion.usage?.total_tokens || 0,
+      model: completion.model
+    }
+
+  } catch (error) {
+    if (error instanceof Error) {
+      // Handle specific OpenAI API errors
+      if (error.message.includes('API key')) {
+        throw new Error('Invalid or missing OpenAI API key')
+      }
+      
+      if (error.message.includes('rate limit')) {
+        throw new Error('OpenAI API rate limit exceeded. Please try again later.')
+      }
+      
+      if (error.message.includes('insufficient_quota')) {
+        throw new Error('OpenAI API quota exceeded. Please check your account.')
+      }
+      
+      throw new Error(`OpenAI API error: ${error.message}`)
+    }
+    
+    throw new Error('Unknown error occurred while generating answer')
+  }
+}

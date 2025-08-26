@@ -1,0 +1,271 @@
+{
+  "version": "1.0",
+  "description": "Index of Rabbi Moshe Chaim Luzzatto (Ramchal) works with canonical references",
+  "works": {
+    "mesillat_yesharim": {
+      "title": "Mesillat Yesharim",
+      "alternativeTitles": ["Mesilat Yesharim", "Path of the Just"],
+      "description": "Guide to ethical and spiritual perfection",
+      "structure": "simple_chapters",
+      "keywords": ["path", "just", "pious", "mesillat", "mesilat", "watchfulness", "zeal", "cleanliness", "separation", "purity", "holiness", "humility", "fear", "hasidut"],
+      "chapters": [
+        {
+          "number": 1,
+          "title": "Introduction and Foundations",
+          "tref": "Mesillat Yesharim 1",
+          "topics": ["purpose of life", "human obligations", "wisdom of the sages"]
+        },
+        {
+          "number": 2,
+          "title": "Watchfulness",
+          "tref": "Mesillat Yesharim 2", 
+          "topics": ["watchfulness", "awareness", "Torah study", "vigilance"]
+        },
+        {
+          "number": 3,
+          "title": "Zeal",
+          "tref": "Mesillat Yesharim 3",
+          "topics": ["zeal", "enthusiasm", "eagerness", "spiritual energy"]
+        },
+        {
+          "number": 4,
+          "title": "Cleanliness",
+          "tref": "Mesillat Yesharim 4",
+          "topics": ["cleanliness", "purity of action", "avoiding sin"]
+        },
+        {
+          "number": 5,
+          "title": "Separation", 
+          "tref": "Mesillat Yesharim 5",
+          "topics": ["separation", "abstinence", "withdrawal from worldliness"]
+        },
+        {
+          "number": 6,
+          "title": "Purity",
+          "tref": "Mesillat Yesharim 6",
+          "topics": ["purity", "tahara", "spiritual cleansing"]
+        },
+        {
+          "number": 7,
+          "title": "Holiness",
+          "tref": "Mesillat Yesharim 7",
+          "topics": ["holiness", "kedusha", "sanctity"]
+        },
+        {
+          "number": 8,
+          "title": "Humility",
+          "tref": "Mesillat Yesharim 8",
+          "topics": ["humility", "modesty", "lowliness"]
+        },
+        {
+          "number": 9,
+          "title": "Fear of Sin",
+          "tref": "Mesillat Yesharim 9",
+          "topics": ["fear of sin", "trepidation", "caution"]
+        },
+        {
+          "number": 10,
+          "title": "Hasidut",
+          "tref": "Mesillat Yesharim 10",
+          "topics": ["hasidut", "piety", "saintliness"]
+        }
+      ]
+    },
+    "derekh_hashem": {
+      "title": "Derekh Hashem",
+      "alternativeTitles": ["Derech Hashem", "The Way of God"],
+      "description": "Systematic exposition of Jewish theology and philosophy",
+      "structure": "complex_parts",
+      "keywords": ["way", "god", "creator", "providence", "soul", "prophecy", "service", "divine", "creation", "purpose"],
+      "parts": [
+        {
+          "number": 1,
+          "title": "Foundations of Existence",
+          "chapters": [
+            {
+              "title": "Introduction",
+              "tref": "Derekh Hashem, Introduction",
+              "topics": ["foundations", "general principles", "divine wisdom", "systematic understanding"]
+            },
+            {
+              "title": "On the Creator",
+              "tref": "Derekh Hashem, Part One, On the Creator",
+              "topics": ["creator", "divine existence", "perfection", "unity"]
+            },
+            {
+              "title": "On the Purpose of Creation",
+              "tref": "Derekh Hashem, Part One, On the Purpose of Creation", 
+              "topics": ["purpose", "creation", "divine goodness", "human purpose"]
+            },
+            {
+              "title": "On Mankind",
+              "tref": "Derekh Hashem, Part One, On Mankind",
+              "topics": ["human nature", "body and soul", "free will", "choice"]
+            },
+            {
+              "title": "On Human Responsibility", 
+              "tref": "Derekh Hashem, Part One, On Human Responsibility",
+              "topics": ["responsibility", "commandments", "this world", "next world"]
+            },
+            {
+              "title": "On the Spiritual Realm",
+              "tref": "Derekh Hashem, Part One, On the Spiritual Realm",
+              "topics": ["spiritual worlds", "angels", "souls", "afterlife"]
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "title": "Divine Providence",
+          "chapters": [
+            {
+              "title": "On Divine Providence in General",
+              "tref": "Derekh Hashem, Part Two, On Divine Providence in General",
+              "topics": ["providence", "hashgacha", "divine oversight", "general providence"]
+            },
+            {
+              "title": "On Mankind in This World",
+              "tref": "Derekh Hashem, Part Two, On Mankind in This World", 
+              "topics": ["human experience", "worldly events", "trials", "circumstances"]
+            },
+            {
+              "title": "On Personal Providence",
+              "tref": "Derekh Hashem, Part Two, On Personal Providence",
+              "topics": ["individual providence", "personal hashgacha", "merit", "judgment"]
+            },
+            {
+              "title": "On Israel and the Nations",
+              "tref": "Derekh Hashem, Part Two, On Israel and the Nations",
+              "topics": ["chosen people", "nations", "jewish mission", "universal purpose"]
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "title": "Soul and Prophecy", 
+          "chapters": [
+            {
+              "title": "On the Soul and Its Activities",
+              "tref": "Derekh Hashem, Part Three, On the Soul and Its Activities",
+              "topics": ["soul", "neshamah", "spiritual faculties", "soul powers"]
+            },
+            {
+              "title": "On Divine Names and Witchcraft",
+              "tref": "Derekh Hashem, Part Three, On Divine Names and Witchcraft",
+              "topics": ["divine names", "practical kabbalah", "forbidden practices", "spiritual forces"]
+            },
+            {
+              "title": "On Divine Inspiration and Prophecy",
+              "tref": "Derekh Hashem, Part Three, On Divine Inspiration and Prophecy", 
+              "topics": ["prophecy", "divine inspiration", "ruach hakodesh", "revelation"]
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "title": "Divine Service",
+          "chapters": [
+            {
+              "title": "On Divine Service",
+              "tref": "Derekh Hashem, Part Four, On Divine Service",
+              "topics": ["worship", "service", "avodah", "relationship with god"]
+            },
+            {
+              "title": "On Torah Study", 
+              "tref": "Derekh Hashem, Part Four, On Torah Study",
+              "topics": ["torah study", "learning", "talmud torah", "wisdom"]
+            },
+            {
+              "title": "On Prayer",
+              "tref": "Derekh Hashem, Part Four, On Prayer", 
+              "topics": ["prayer", "tefillah", "communication with god", "supplication"]
+            }
+          ]
+        }
+      ]
+    },
+    "daat_tevunot": {
+      "title": "Da'at Tevunot",
+      "alternativeTitles": ["Daat Tevunot", "Knowledge of Understanding"],
+      "description": "Dialogue on divine providence and theodicy",
+      "structure": "simple_chapters",
+      "keywords": ["knowledge", "understanding", "daat", "tevunot", "dialogue", "theodicy", "suffering", "justice"],
+      "chapters": [
+        {
+          "number": 1,
+          "title": "The Question of Suffering",
+          "tref": "Da'at Tevunot 1",
+          "topics": ["divine justice", "suffering of righteous", "prosperity of wicked", "theodicy"]
+        },
+        {
+          "number": 2,
+          "title": "Divine Wisdom in Creation",
+          "tref": "Da'at Tevunot 2", 
+          "topics": ["divine wisdom", "purpose of creation", "hidden providence", "ultimate justice"]
+        },
+        {
+          "number": 3,
+          "title": "The Nature of Divine Justice",
+          "tref": "Da'at Tevunot 3",
+          "topics": ["justice", "mercy", "divine attributes", "judgment"]
+        },
+        {
+          "number": 4,
+          "title": "Resolution and Understanding",
+          "tref": "Da'at Tevunot 4",
+          "topics": ["resolution", "faith", "acceptance", "divine plan"]
+        }
+      ]
+    },
+    "other_works": {
+      "kalach_pitchei_chokhmah": {
+        "title": "Kalach Pitchei Chokhmah", 
+        "alternativeTitles": ["138 Openings of Wisdom"],
+        "description": "Kabbalistic work on divine wisdom",
+        "structure": "openings",
+        "keywords": ["wisdom", "chokhmah", "kabbalah", "openings", "pitchei"],
+        "tref": "Kalach Pitchei Chokhmah"
+      },
+      "essay_on_fundamentals": {
+        "title": "Essay on Fundamentals",
+        "alternativeTitles": ["Ma'amar al Yesodot"],
+        "description": "Summary of the principles in Derekh Hashem",
+        "structure": "essay",
+        "keywords": ["fundamentals", "principles", "basics", "summary"],
+        "tref": "Essay on Fundamentals"
+      },
+      "sefer_hahiggayon": {
+        "title": "Sefer HaHiggayon",
+        "alternativeTitles": ["Book of Logic"],
+        "description": "Work on logic and reasoning",
+        "structure": "logical_treatise",
+        "keywords": ["logic", "reasoning", "higgayon", "thinking", "argumentation"],
+        "tref": "Sefer HaHiggayon"
+      },
+      "sefer_hamelitzah": {
+        "title": "Sefer HaMelitzah", 
+        "alternativeTitles": ["Book of Rhetoric"],
+        "description": "Work on rhetoric and eloquent speech",
+        "structure": "rhetorical_treatise", 
+        "keywords": ["rhetoric", "speech", "eloquence", "melitzah", "language"],
+        "tref": "Sefer HaMelitzah"
+      },
+      "asarah_perakim": {
+        "title": "Asarah Perakim LeRamchal",
+        "alternativeTitles": ["Ten Chapters"],
+        "description": "Collection of ten philosophical chapters",
+        "structure": "chapters",
+        "keywords": ["ten", "chapters", "perakim", "philosophy"],
+        "tref": "Asarah Perakim LeRamchal"
+      },
+      "derech_etz_chayim": {
+        "title": "Derech Etz Chayim (Ramchal)",
+        "alternativeTitles": ["Way of the Tree of Life"],
+        "description": "Introduction to Pitchei Chokhmah",
+        "structure": "introductory_work",
+        "keywords": ["tree of life", "etz chayim", "introduction", "preparation"],
+        "tref": "Derech Etz Chayim (Ramchal)"
+      }
+    }
+  }
+}
