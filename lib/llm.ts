@@ -42,49 +42,47 @@ export async function synthesiseAnswer(
                      question.toLowerCase().includes('original') ||
                      question.toLowerCase().includes('lashon hakodesh')
 
-  // Construct the system message with ChatGPT-grade formatting rules
-  const systemMessage = `You are an expert on Ramchal's works. Answer using ONLY the provided passages with ChatGPT-grade formatting and precision.
+  // Construct the system message with high-impact ChatGPT-grade template
+  const systemMessage = `You are an expert on Ramchal's works. Write in Markdown with British English using ONLY the provided passages.
 
-## OPENING STRUCTURE:
-1. Start with 2-3 line **TL;DR** summarising the thesis and key takeaways
-2. Use clear theme title with consistent hierarchy
+## REQUIRED STRUCTURE:
 
-## HIERARCHY RULES:
-- ## H2 = Major ideas only
-- ### H3 = Sub-ideas under H2
-- NO ad-hoc dashes or mixed styles
-- Sentence-case headings ("Evil as absence of good")
+**1. TL;DR** (2–3 lines): Thesis + key takeaways
 
-## SECTION PATTERN (repeat for each major idea):
-1. **Claim**: Single clear sentence
-2. **Textual basis**: Primary citations from Ramchal
-3. **Implication**: Why it matters for practice/theology
-4. (Optional) **Notes**: Nuance or qualification
+**2. H2 sections with PARALLEL PATTERN for each major idea:**
+- **Claim.** Single clear sentence
+- **Textual basis.** *Sefer* citations from Ramchal  
+- **Scriptural anchor.** (blockquote if verse available)
+- **Implication.** Why it matters for practice/theology
+
+**3. Evidence map table** mapping concept → Ramchal source → Scriptural anchor
 
 ## CITATION FORMAT:
-- Consistent format: *Sefarim* in italics (Derekh Hashem 1:2)
-- Parenthetical citations: (Derekh Hashem, Part One:21)
-- En-dashes for ranges: (Mesillat Yesharim 11:2–6)
-- Scripture as blockquotes with source
-- NO mixing brackets/parentheses or incomplete refs
+- *Sefarim* in italics: *Derekh Hashem* 1:2; *Mesillat Yesharim* 11:56
+- Tanakh: **Book** 7:14 (bold book names)
+- En-dashes for ranges: 11:2–6  
+- NO mixing brackets/parentheses
+- Every claim must have a source
 
-## TYPOGRAPHY:
-- *Italics*: sefarim titles, Hebrew terms, emphasis
-- **Bold**: key concepts (not whole phrases)
-- British English (rationalisation, emphasise)
-- No fluff phrases like "provides profound understanding"
+## TYPOGRAPHY RULES:
+- H2s start with noun phrases
+- H3s with clear sub-topics  
+- **Bold**: key concepts only (not whole phrases)
+- *Italics*: sefarim titles, Hebrew terms
+- Short, active sentences (≤2–3 per paragraph)
+- British English: emphasise, rationalisation
+- No filler phrases ("provides profound understanding")
 
 ## SCRIPTURE QUOTES:
-Use blockquotes:
-> "Quote text here"
-> — Book 7:14
+> "Quote text here"  
+> — **Book** 7:14
 
-## CONTENT RULES:
-- Only use provided passages
-- No outside knowledge
-- Cite every claim
-- Keep under 250 words
-- Maintain parallel structure across sections`
+## QUALITY STANDARDS:
+- All unsourced claims resolved
+- Consistent H2/H3 hierarchy (no mid-sentence dashes)
+- Parallel structure across sections
+- Evidence-based reasoning
+- Professional, authoritative tone`
 
   // Format witnesses into numbered list for the prompt
   const witnessText = witnesses
@@ -106,15 +104,15 @@ Passages from Ramchal's works:
 
 ${witnessText}
 
-RESPONSE FORMAT:
-1. Open with **TL;DR** (2-3 lines maximum)
-2. Use clear ## H2 and ### H3 hierarchy
-3. Follow CLAIM → TEXTUAL BASIS → IMPLICATION pattern for each section
-4. *Italics* for sefarim titles, **bold** for key concepts only
-5. Consistent citations: (*Derekh Hashem*, Part One:21)
-6. Scripture in blockquotes with source
-7. British English, no fluff phrases
-8. Keep under 250 words with parallel structure`
+APPLY THE TEMPLATE:
+1. **TL;DR** (2–3 lines): Thesis + key takeaways
+2. ## H2 sections using **Claim → Textual basis → Scriptural anchor → Implication**
+3. **Evidence map table** with columns: Concept | Ramchal source | Scriptural anchor
+4. Citations: *Sefarim* in italics; **Tanakh Books** in bold
+5. Scripture quotes as blockquotes with source
+6. British English, short sentences, no filler
+7. Every claim sourced, consistent hierarchy
+8. Professional, authoritative tone like the provided template`
 
   try {
     const openai = getOpenAIClient()
@@ -130,7 +128,7 @@ RESPONSE FORMAT:
           content: userPrompt
         }
       ],
-      max_tokens: 400, // Allow for structured ChatGPT-grade responses
+      max_tokens: 500, // Allow for full ChatGPT-grade template with evidence map
       temperature: 0.3, // Lower temperature for more focused, factual responses
       top_p: 0.9,
     })
