@@ -4,7 +4,7 @@
  */
 
 import { SemanticSearchEngine, SearchOptions } from './semantic-search';
-import { textChunkDB, initializeDatabase } from './database';
+import { initializeDatabase } from './database';
 
 export interface SemanticWitness {
   tref: string;
@@ -193,7 +193,7 @@ export async function bootstrapSemanticRAG(question: string): Promise<{
  */
 export async function hybridBootstrapRAG(
   question: string,
-  legacyBootstrapRAG: (question: string) => Promise<any>
+  legacyBootstrapRAG: (question: string) => Promise<{question: string; witnesses: Array<{tref: string; text: string; hebrew?: string}>; guesses: string[]}>
 ): Promise<{
   question: string;
   witnesses: Array<{ tref: string; text: string; hebrew?: string }>;
@@ -222,7 +222,7 @@ export async function hybridBootstrapRAG(
       const combinedWitnesses = [...semanticResult.witnesses];
       const existingRefs = new Set(semanticResult.witnesses.map(w => w.tref));
       
-      legacyResult.witnesses.forEach((witness: any) => {
+      legacyResult.witnesses.forEach((witness: {tref: string; text: string; hebrew?: string}) => {
         if (!existingRefs.has(witness.tref)) {
           combinedWitnesses.push(witness);
         }

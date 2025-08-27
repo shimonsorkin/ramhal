@@ -256,7 +256,7 @@ export class SemanticSearchEngine {
     
     // Reconstruct in original order with cached scores
     return chunkIds.map((chunkId, index) => {
-      const row = rows.find((r: any) => r.chunk_id === chunkId);
+      const row = rows.find((r: {chunk_id: number; work_id: number; work_title: string; author_name: string; tref: string; content_english: string; content_hebrew?: string; topic_keywords?: string[]}) => r.chunk_id === chunkId);
       if (!row) return null;
       
       return {

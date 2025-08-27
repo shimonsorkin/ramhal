@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { bootstrapRAG, verifyAnswer } from '../../../../lib/rag'
-import { hybridBootstrapRAG, bootstrapSemanticRAG } from '../../../../lib/semantic-rag'
+import { hybridBootstrapRAG } from '../../../../lib/semantic-rag'
 import { synthesiseAnswer } from '../../../../lib/llm'
 
 const AskRequestSchema = z.object({
@@ -32,7 +32,12 @@ export async function POST(request: NextRequest) {
     // Step 1: Bootstrap RAG to get witnesses
     console.log(`🔍 RAG Bootstrap for question: "${question}" (semantic: ${useSemanticSearch})`)
     
-    let ragResult: any;
+    let ragResult: {
+      question: string;
+      witnesses: Array<{tref: string; text: string; hebrew?: string}>;
+      guesses: string[];
+      searchMethod?: string;
+    };
     let searchMethod = 'legacy';
     
     if (useSemanticSearch) {

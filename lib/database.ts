@@ -4,7 +4,8 @@
  */
 
 import { Pool, PoolClient } from 'pg';
-import { TextChunk, SearchResult, SearchOptions } from './semantic-search';
+import { TextChunk } from './preprocessing';
+import { SearchResult, SearchOptions } from './semantic-search';
 
 // Database connection pool
 let pool: Pool | null = null;
@@ -124,7 +125,7 @@ export class TextChunkDB {
   /**
    * Get chunks by IDs (for cache hydration)
    */
-  async getChunksByIds(chunkIds: number[]): Promise<any[]> {
+  async getChunksByIds(chunkIds: number[]): Promise<Array<{chunk_id: number; work_id: number; work_title: string; author_name: string; tref: string; content_english: string; content_hebrew?: string; topic_keywords?: string[]}>> {
     const query = `
       SELECT 
         tc.id as chunk_id,
@@ -153,7 +154,7 @@ export class TextChunkDB {
     const minSimilarity = options.minSimilarity || 0.0;
     
     let whereClause = 'tc.embedding_english IS NOT NULL';
-    const params: any[] = [JSON.stringify(queryEmbedding)];
+    const params: (string | number[] | number)[] = [JSON.stringify(queryEmbedding)];
     let paramIndex = 2;
     
     if (options.workIds && options.workIds.length > 0) {
@@ -217,7 +218,7 @@ export class TextChunkDB {
       .join(' & ');
     
     let whereClause = 'tc.search_vector_english @@ to_tsquery(\'english\', $1)';
-    const params: any[] = [tsQuery];
+    const params: (string | number[])[] = [tsQuery];
     let paramIndex = 2;
     
     if (options.workIds && options.workIds.length > 0) {
