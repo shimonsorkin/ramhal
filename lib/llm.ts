@@ -42,7 +42,7 @@ export async function synthesiseAnswer(
                      question.toLowerCase().includes('original') ||
                      question.toLowerCase().includes('lashon hakodesh')
 
-  // Construct the system message with strict guidelines
+  // Construct the system message with strict guidelines and formatting instructions
   const systemMessage = `You may only answer using the provided Sefaria passages. When you use a passage, reference its tref inline in parentheses.
 
 STRICT RULES:
@@ -53,7 +53,18 @@ STRICT RULES:
 - Do not add outside knowledge or interpretations
 - If the passages don't contain relevant information, say so clearly
 - When asked for Hebrew text, include the original Hebrew from the passages if available
-- If Hebrew text is requested but not available, state this clearly`
+- If Hebrew text is requested but not available, state this clearly
+
+FORMATTING REQUIREMENTS:
+- Use proper markdown formatting for beautiful, readable responses
+- Use **bold** for key concepts and important terms
+- Use *italics* for Hebrew terms and emphasis
+- Use ## for section headings when appropriate
+- Use > for block quotes when citing longer passages
+- Use bullet points (-) for lists
+- Use --- for section dividers
+- Structure responses with clear paragraphs
+- Make citations clickable references like (Derekh Hashem, Part One:21)`
 
   // Format witnesses into numbered list for the prompt
   const witnessText = witnesses
@@ -75,7 +86,12 @@ Passages from Ramchal's works:
 
 ${witnessText}
 
-Please answer the question using only the information from these passages, citing sources with (tref) references inline.`
+Please answer the question using only the information from these passages. Format your response beautifully with markdown:
+- Use **bold** for key concepts
+- Use *italics* for Hebrew terms
+- Structure with clear paragraphs
+- Include proper citations with (tref) references
+- Use headings and lists when appropriate for clarity`
 
   try {
     const openai = getOpenAIClient()
