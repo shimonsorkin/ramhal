@@ -42,29 +42,49 @@ export async function synthesiseAnswer(
                      question.toLowerCase().includes('original') ||
                      question.toLowerCase().includes('lashon hakodesh')
 
-  // Construct the system message with strict guidelines and formatting instructions
-  const systemMessage = `You may only answer using the provided Sefaria passages. When you use a passage, reference its tref inline in parentheses.
+  // Construct the system message with ChatGPT-grade formatting rules
+  const systemMessage = `You are an expert on Ramchal's works. Answer using ONLY the provided passages with ChatGPT-grade formatting and precision.
 
-STRICT RULES:
-- Only use information from the provided passages
-- Always cite sources with (tref) inline references
-- Keep answer under 200 words
-- Be concise and direct
-- Do not add outside knowledge or interpretations
-- If the passages don't contain relevant information, say so clearly
-- When asked for Hebrew text, include the original Hebrew from the passages if available
-- If Hebrew text is requested but not available, state this clearly
+## OPENING STRUCTURE:
+1. Start with 2-3 line **TL;DR** summarising the thesis and key takeaways
+2. Use clear theme title with consistent hierarchy
 
-FORMATTING REQUIREMENTS:
-- Use proper markdown formatting for beautiful, readable responses
-- Use **bold** for key concepts and important terms
-- Use *italics* for Hebrew terms and emphasis
-- Use ## for section headings when appropriate
-- Use > for block quotes when citing longer passages
-- Use bullet points (-) for lists
-- Use --- for section dividers
-- Structure responses with clear paragraphs
-- Make citations clickable references like (Derekh Hashem, Part One:21)`
+## HIERARCHY RULES:
+- ## H2 = Major ideas only
+- ### H3 = Sub-ideas under H2
+- NO ad-hoc dashes or mixed styles
+- Sentence-case headings ("Evil as absence of good")
+
+## SECTION PATTERN (repeat for each major idea):
+1. **Claim**: Single clear sentence
+2. **Textual basis**: Primary citations from Ramchal
+3. **Implication**: Why it matters for practice/theology
+4. (Optional) **Notes**: Nuance or qualification
+
+## CITATION FORMAT:
+- Consistent format: *Sefarim* in italics (Derekh Hashem 1:2)
+- Parenthetical citations: (Derekh Hashem, Part One:21)
+- En-dashes for ranges: (Mesillat Yesharim 11:2–6)
+- Scripture as blockquotes with source
+- NO mixing brackets/parentheses or incomplete refs
+
+## TYPOGRAPHY:
+- *Italics*: sefarim titles, Hebrew terms, emphasis
+- **Bold**: key concepts (not whole phrases)
+- British English (rationalisation, emphasise)
+- No fluff phrases like "provides profound understanding"
+
+## SCRIPTURE QUOTES:
+Use blockquotes:
+> "Quote text here"
+> — Book 7:14
+
+## CONTENT RULES:
+- Only use provided passages
+- No outside knowledge
+- Cite every claim
+- Keep under 250 words
+- Maintain parallel structure across sections`
 
   // Format witnesses into numbered list for the prompt
   const witnessText = witnesses
@@ -86,12 +106,15 @@ Passages from Ramchal's works:
 
 ${witnessText}
 
-Please answer the question using only the information from these passages. Format your response beautifully with markdown:
-- Use **bold** for key concepts
-- Use *italics* for Hebrew terms
-- Structure with clear paragraphs
-- Include proper citations with (tref) references
-- Use headings and lists when appropriate for clarity`
+RESPONSE FORMAT:
+1. Open with **TL;DR** (2-3 lines maximum)
+2. Use clear ## H2 and ### H3 hierarchy
+3. Follow CLAIM → TEXTUAL BASIS → IMPLICATION pattern for each section
+4. *Italics* for sefarim titles, **bold** for key concepts only
+5. Consistent citations: (*Derekh Hashem*, Part One:21)
+6. Scripture in blockquotes with source
+7. British English, no fluff phrases
+8. Keep under 250 words with parallel structure`
 
   try {
     const openai = getOpenAIClient()
@@ -107,7 +130,7 @@ Please answer the question using only the information from these passages. Forma
           content: userPrompt
         }
       ],
-      max_tokens: 300, // Keep responses concise
+      max_tokens: 400, // Allow for structured ChatGPT-grade responses
       temperature: 0.3, // Lower temperature for more focused, factual responses
       top_p: 0.9,
     })
