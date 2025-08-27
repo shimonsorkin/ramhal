@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { bootstrapRAG, verifyAnswer } from '../../../../lib/rag'
+import { hybridBootstrapRAG, bootstrapSemanticRAG } from '../../../../lib/semantic-rag'
 import { synthesiseAnswer } from '../../../../lib/llm'
 
 const AskRequestSchema = z.object({
   question: z.string().min(1, 'Question cannot be empty').max(500, 'Question is too long'),
+  useSemanticSearch: z.boolean().optional().default(true), // Semantic search is now the default
 })
 
 export async function POST(request: NextRequest) {
@@ -25,11 +27,29 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const { question } = validationResult.data
+    const { question, useSemanticSearch } = validationResult.data
 
     // Step 1: Bootstrap RAG to get witnesses
-    console.log(`🔍 RAG Bootstrap for question: "${question}"`)
-    const ragResult = await bootstrapRAG(question)
+    console.log(`🔍 RAG Bootstrap for question: "${question}" (semantic: ${useSemanticSearch})`)
+    
+    let ragResult: any;
+    let searchMethod = 'legacy';
+    
+    if (useSemanticSearch) {
+      // Use new semantic search system
+      try {
+        ragResult = await hybridBootstrapRAG(question, bootstrapRAG);
+        searchMethod = ragResult.searchMethod || 'semantic';
+        console.log(`🎯 Using ${searchMethod} search`);
+      } catch (error) {
+        console.warn('Semantic search failed, falling back to legacy:', error);
+        ragResult = await bootstrapRAG(question);
+        searchMethod = 'legacy-fallback';
+      }
+    } else {
+      // Use original JSON-based system
+      ragResult = await bootstrapRAG(question);
+    }
     
     if (ragResult.witnesses.length === 0) {
       return NextResponse.json({
@@ -70,6 +90,8 @@ export async function POST(request: NextRequest) {
         witnessCount: ragResult.witnesses.length,
         tokensUsed: synthesis.tokensUsed,
         model: synthesis.model,
+        searchMethod: searchMethod,
+        useSemanticSearch: useSemanticSearch,
         timestamp: new Date().toISOString()
       }
     })
@@ -86,6 +108,14 @@ export async function POST(request: NextRequest) {
           error: 'Text Retrieval Error',
           message: 'Failed to retrieve relevant texts from Sefaria'
         }, { status: 502 })
+      }
+      
+      // Database/Semantic search errors
+      if (error.message.includes('Semantic search failed') || error.message.includes('database')) {
+        return NextResponse.json({
+          error: 'Search Service Error',
+          message: 'The search service is temporarily unavailable'
+        }, { status: 503 })
       }
       
       // OpenAI API errors

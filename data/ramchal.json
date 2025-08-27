@@ -7,7 +7,7 @@
       "alternativeTitles": ["Mesilat Yesharim", "Path of the Just"],
       "description": "Guide to ethical and spiritual perfection",
       "structure": "simple_chapters",
-      "keywords": ["path", "just", "pious", "mesillat", "mesilat", "watchfulness", "zeal", "cleanliness", "separation", "purity", "holiness", "humility", "fear", "hasidut"],
+      "keywords": ["path", "just", "pious", "mesillat", "mesilat", "watchfulness", "zeal", "cleanliness", "separation", "purity", "holiness", "humility", "fear", "hasidut", "evil", "sin", "temptation", "yetzer hara", "inclination"],
       "chapters": [
         {
           "number": 1,
@@ -76,7 +76,7 @@
       "alternativeTitles": ["Derech Hashem", "The Way of God"],
       "description": "Systematic exposition of Jewish theology and philosophy",
       "structure": "complex_parts",
-      "keywords": ["way", "god", "creator", "providence", "soul", "prophecy", "service", "divine", "creation", "purpose"],
+      "keywords": ["way", "god", "creator", "providence", "soul", "prophecy", "service", "divine", "creation", "purpose", "evil", "suffering", "theodicy", "justice", "judgment", "punishment", "reward"],
       "parts": [
         {
           "number": 1,
@@ -95,17 +95,17 @@
             {
               "title": "On the Purpose of Creation",
               "tref": "Derekh Hashem, Part One, On the Purpose of Creation", 
-              "topics": ["purpose", "creation", "divine goodness", "human purpose"]
+              "topics": ["purpose", "creation", "divine goodness", "human purpose", "evil", "suffering", "theodicy"]
             },
             {
               "title": "On Mankind",
               "tref": "Derekh Hashem, Part One, On Mankind",
-              "topics": ["human nature", "body and soul", "free will", "choice"]
+              "topics": ["human nature", "body and soul", "free will", "choice", "evil inclination", "yetzer hara", "moral struggle"]
             },
             {
               "title": "On Human Responsibility", 
               "tref": "Derekh Hashem, Part One, On Human Responsibility",
-              "topics": ["responsibility", "commandments", "this world", "next world"]
+              "topics": ["responsibility", "commandments", "this world", "next world", "sin", "punishment", "reward", "judgment"]
             },
             {
               "title": "On the Spiritual Realm",
@@ -131,7 +131,7 @@
             {
               "title": "On Personal Providence",
               "tref": "Derekh Hashem, Part Two, On Personal Providence",
-              "topics": ["individual providence", "personal hashgacha", "merit", "judgment"]
+              "topics": ["individual providence", "personal hashgacha", "merit", "judgment", "suffering of righteous", "prosperity of wicked", "divine justice"]
             },
             {
               "title": "On Israel and the Nations",
@@ -189,13 +189,13 @@
       "alternativeTitles": ["Daat Tevunot", "Knowledge of Understanding"],
       "description": "Dialogue on divine providence and theodicy",
       "structure": "simple_chapters",
-      "keywords": ["knowledge", "understanding", "daat", "tevunot", "dialogue", "theodicy", "suffering", "justice"],
+      "keywords": ["knowledge", "understanding", "daat", "tevunot", "dialogue", "theodicy", "suffering", "justice", "evil", "why bad things happen", "divine wisdom", "righteous suffer"],
       "chapters": [
         {
           "number": 1,
           "title": "The Question of Suffering",
           "tref": "Da'at Tevunot 1",
-          "topics": ["divine justice", "suffering of righteous", "prosperity of wicked", "theodicy"]
+          "topics": ["divine justice", "suffering of righteous", "prosperity of wicked", "theodicy", "evil", "problem of evil", "why evil exists"]
         },
         {
           "number": 2,

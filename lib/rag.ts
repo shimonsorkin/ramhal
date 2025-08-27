@@ -259,14 +259,15 @@ function generateGuessRefs(question: string): string[] {
   const matchedWorks = findMatchingWorks(question)
   
   if (matchedWorks.length === 0) {
-    // Fallback to default references from major works
+    // Fallback: search comprehensively across all major works
     const defaultWorks = [
       ramchalIndex.works.mesillat_yesharim as RamchalWork,
       ramchalIndex.works.derekh_hashem as RamchalWork,
       ramchalIndex.works.daat_tevunot as RamchalWork
     ].filter(Boolean)
     
-    return generateWitnessRefs(defaultWorks, question)
+    // For unknown topics, sample broadly from all works
+    return generateBroadWitnessRefs(defaultWorks, question)
   }
   
   // Generate base witnesses from matched works
@@ -276,6 +277,39 @@ function generateGuessRefs(question: string): string[] {
   const allRefs = addAdjacentChapters(baseRefs, matchedWorks)
   
   return allRefs
+}
+
+/**
+ * Generate broad witness references when no specific matches are found
+ * This ensures comprehensive coverage for topics not in our index
+ */
+function generateBroadWitnessRefs(works: RamchalWork[], question: string): string[] {
+  const witnessRefs = new Set<string>()
+  
+  for (const work of works) {
+    if (work.structure === 'simple_chapters' && work.chapters) {
+      // Sample chapters throughout the work, not just first few
+      const sampleSize = Math.min(6, work.chapters.length)
+      const step = Math.max(1, Math.floor(work.chapters.length / sampleSize))
+      
+      for (let i = 0; i < work.chapters.length; i += step) {
+        witnessRefs.add(work.chapters[i].tref)
+        if (witnessRefs.size >= sampleSize) break
+      }
+    } else if (work.structure === 'complex_parts' && work.parts) {
+      // Sample key chapters from each part
+      for (const part of work.parts) {
+        const chaptersToSample = Math.min(3, part.chapters.length)
+        for (let i = 0; i < chaptersToSample; i++) {
+          witnessRefs.add(part.chapters[i].tref)
+        }
+      }
+    } else if (work.tref) {
+      witnessRefs.add(work.tref)
+    }
+  }
+  
+  return Array.from(witnessRefs).slice(0, 15) // Broader sampling
 }
 
 // The generateAdjacentRefs function is no longer needed as we handle
