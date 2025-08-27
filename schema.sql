@@ -167,3 +167,51 @@ INSERT INTO works (author_id, title, hebrew_title, alternative_titles, descripti
  'Systematic exposition of Jewish theology and philosophy', 'Derekh Hashem'),
 (1, 'Da''at Tevunot', 'דעת תבונות', ARRAY['Daat Tevunot', 'Knowledge of Understanding'], 
  'Dialogue on divine providence and theodicy', 'Da''at Tevunot');
+
+-- Chat system tables for multi-conversation support
+CREATE TABLE chat_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(255) NOT NULL DEFAULT 'New Chat',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id VARCHAR(255), -- For future user authentication
+    is_archived BOOLEAN DEFAULT false
+);
+
+-- Messages table for chat history
+CREATE TABLE chat_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    chat_session_id UUID REFERENCES chat_sessions(id) ON DELETE CASCADE,
+    role VARCHAR(20) NOT NULL CHECK (role IN ('user', 'assistant')),
+    content TEXT NOT NULL,
+    
+    -- For assistant messages, store the full response data
+    witnesses JSONB, -- Array of witness objects
+    verification JSONB, -- Verification scores and data
+    metadata JSONB, -- Model info, tokens, etc.
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    message_order INTEGER NOT NULL -- For preserving order
+);
+
+-- Indexes for chat system performance
+CREATE INDEX idx_chat_sessions_user_id ON chat_sessions(user_id);
+CREATE INDEX idx_chat_sessions_updated_at ON chat_sessions(updated_at DESC);
+CREATE INDEX idx_chat_messages_session_id ON chat_messages(chat_session_id);
+CREATE INDEX idx_chat_messages_order ON chat_messages(chat_session_id, message_order);
+
+-- Trigger to update chat session timestamp when messages are added
+CREATE OR REPLACE FUNCTION update_chat_session_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE chat_sessions 
+    SET updated_at = CURRENT_TIMESTAMP 
+    WHERE id = NEW.chat_session_id;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_update_chat_session_timestamp
+    AFTER INSERT ON chat_messages
+    FOR EACH ROW
+    EXECUTE FUNCTION update_chat_session_timestamp();

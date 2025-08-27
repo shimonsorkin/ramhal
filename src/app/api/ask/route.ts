@@ -3,10 +3,12 @@ import { z } from 'zod'
 import { bootstrapRAG, verifyAnswer } from '../../../../lib/rag'
 import { hybridBootstrapRAG } from '../../../../lib/semantic-rag'
 import { synthesiseAnswer } from '../../../../lib/llm'
+import { chatDB } from '../../../../lib/chat'
 
 const AskRequestSchema = z.object({
   question: z.string().min(1, 'Question cannot be empty').max(500, 'Question is too long'),
   useSemanticSearch: z.boolean().optional().default(true), // Semantic search is now the default
+  chatId: z.string().uuid().optional(), // Optional chat ID for multi-chat support
 })
 
 export async function POST(request: NextRequest) {
@@ -27,7 +29,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    const { question, useSemanticSearch } = validationResult.data
+    const { question, useSemanticSearch, chatId } = validationResult.data
 
     // Step 1: Bootstrap RAG to get witnesses
     console.log(`🔍 RAG Bootstrap for question: "${question}" (semantic: ${useSemanticSearch})`)
@@ -77,6 +79,62 @@ export async function POST(request: NextRequest) {
     
     console.log(`📊 Verification: ${verification.totalSentences - verification.unsourcedSentences}/${verification.totalSentences} sentences properly sourced`)
 
+    // Save to chat if chatId provided
+    if (chatId) {
+      try {
+        // Verify chat exists
+        const { session } = await chatDB.getChat(chatId)
+        if (!session) {
+          return NextResponse.json({
+            error: 'Chat not found',
+            message: 'The specified chat session does not exist'
+          }, { status: 404 })
+        }
+
+        // Save user question
+        await chatDB.addMessage({
+          chat_session_id: chatId,
+          role: 'user',
+          content: question
+        })
+
+        // Save assistant response with full context
+        await chatDB.addMessage({
+          chat_session_id: chatId,
+          role: 'assistant',
+          content: synthesis.answer,
+          witnesses: ragResult.witnesses,
+          verification: {
+            unsourcedSentences: verification.unsourcedSentences,
+            totalSentences: verification.totalSentences,
+            sourcedSentences: verification.totalSentences - verification.unsourcedSentences,
+            accuracy: verification.totalSentences > 0 ? 
+              ((verification.totalSentences - verification.unsourcedSentences) / verification.totalSentences * 100) : 100,
+            verifiedAnswer: verification.verifiedAnswer
+          },
+          metadata: {
+            guesses: ragResult.guesses,
+            witnessCount: ragResult.witnesses.length,
+            tokensUsed: synthesis.tokensUsed,
+            model: synthesis.model,
+            searchMethod: searchMethod,
+            useSemanticSearch: useSemanticSearch,
+            timestamp: new Date().toISOString()
+          }
+        })
+
+        // Auto-update chat title if this is the first user message
+        if (session.title === 'New Chat') {
+          await chatDB.updateAutoTitle(chatId, question)
+        }
+
+        console.log(`💬 Saved conversation to chat ${chatId}`)
+      } catch (chatError) {
+        console.error('Failed to save to chat:', chatError)
+        // Don't fail the entire request if chat saving fails
+      }
+    }
+
     // Return the complete result
     return NextResponse.json({
       question: ragResult.question,
@@ -97,6 +155,7 @@ export async function POST(request: NextRequest) {
         model: synthesis.model,
         searchMethod: searchMethod,
         useSemanticSearch: useSemanticSearch,
+        chatId: chatId || null,
         timestamp: new Date().toISOString()
       }
     })
