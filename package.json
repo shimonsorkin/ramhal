@@ -13,7 +13,10 @@
     "generate-embeddings": "node scripts/generate-embeddings.js",
     "test-semantic-search": "node scripts/test-semantic-search.js",
     "test-api-integration": "node scripts/test-api-integration.js",
-    "process-complete-works": "node scripts/process-complete-works.js"
+    "process-complete-works": "node scripts/process-complete-works.js",
+    "process-missing-sections": "node scripts/process-missing-sections.js",
+    "process-missing-sections-v2": "node scripts/process-missing-sections-v2.js",
+    "add-missing-content": "node scripts/add-missing-content.js"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",
