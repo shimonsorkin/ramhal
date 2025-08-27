@@ -68,7 +68,7 @@ export default function MessageBubble({
   return (
     <div className="flex justify-start mb-6">
       <div className="max-w-4xl w-full">
-        <div className="bg-white border border-gray-200 rounded-lg shadow-sm">
+        <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
           {/* Header with metadata toggle */}
           <div className="px-4 py-3 border-b border-gray-100 flex justify-between items-center">
             <div className="flex items-center space-x-2">
@@ -116,16 +116,18 @@ export default function MessageBubble({
           )}
 
           {/* Message content */}
-          <div className="px-4 py-4">
-            <RichContent 
-              content={showVerificationMode && message.verification?.verifiedAnswer 
-                ? message.verification.verifiedAnswer 
-                : message.content}
-              className="prose prose-sm max-w-none"
-              witnesses={message.witnesses}
-              onWitnessClick={onWitnessClick}
-              isVerified={showVerificationMode}
-            />
+          <div className="px-4 py-4 overflow-x-auto">
+            <div className="max-h-none">
+              <RichContent 
+                content={showVerificationMode && message.verification?.verifiedAnswer 
+                  ? message.verification.verifiedAnswer 
+                  : message.content}
+                className="prose prose-sm max-w-none break-words"
+                witnesses={message.witnesses}
+                onWitnessClick={onWitnessClick}
+                isVerified={showVerificationMode}
+              />
+            </div>
           </div>
 
           {/* Sources */}

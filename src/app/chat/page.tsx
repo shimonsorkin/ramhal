@@ -162,7 +162,7 @@ export default function ChatPage() {
         )}
 
         {/* Messages */}
-        <div className="flex-1 flex flex-col min-h-0">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <MessageList
             messages={currentMessages}
             loading={loadingMessages || loading}

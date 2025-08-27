@@ -103,6 +103,11 @@ export default function MessageList({
       ref={containerRef}
       className="flex-1 overflow-y-auto px-4 py-6"
       onScroll={handleScroll}
+      style={{ 
+        height: '100%',
+        maxHeight: 'calc(100vh - 240px)',
+        minHeight: '400px'
+      }}
     >
       {/* Load more indicator */}
       {loadingMore && (
