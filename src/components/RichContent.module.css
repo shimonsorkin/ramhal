@@ -1,35 +1,5 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-
-/* Enhanced heading styles for RichContent - more specific selectors */
-div.prose h2,
-.prose h2,
-h2 {
+/* Enhanced heading styles for RichContent */
+.richContentWrapper :global(h2) {
   position: relative !important;
   font-weight: 800 !important;
   color: #1e40af !important;
@@ -47,17 +17,13 @@ h2 {
   display: block !important;
 }
 
-div.prose h2:hover,
-.prose h2:hover,
-h2:hover {
+.richContentWrapper :global(h2:hover) {
   background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%) !important;
   transform: translateX(4px) !important;
   box-shadow: 0 6px 20px rgba(59, 130, 246, 0.2) !important;
 }
 
-div.prose h3,
-.prose h3,
-h3 {
+.richContentWrapper :global(h3) {
   position: relative !important;
   font-weight: 700 !important;
   color: #1e40af !important;
@@ -74,9 +40,7 @@ h3 {
   display: block !important;
 }
 
-div.prose h3:hover,
-.prose h3:hover,
-h3:hover {
+.richContentWrapper :global(h3:hover) {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
   transform: translateX(2px) !important;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15) !important;

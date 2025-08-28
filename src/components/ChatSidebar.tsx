@@ -77,6 +77,17 @@ export default function ChatSidebar({
     }
   }
 
+  // Strip markdown syntax from titles
+  const stripMarkdown = (text: string): string => {
+    return text
+      .replace(/^#+\s+/, '') // Remove heading markers (# ## ###)
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold **text**
+      .replace(/\*(.*?)\*/g, '$1') // Remove italic *text*
+      .replace(/`(.*?)`/g, '$1') // Remove inline code `text`
+      .replace(/\[(.*?)\]\(.*?\)/g, '$1') // Remove links [text](url) 
+      .trim()
+  }
+
   return (
     <div className="w-80 bg-gray-50 border-r border-gray-200 flex flex-col h-screen">
       {/* Header */}
@@ -160,9 +171,9 @@ export default function ChatSidebar({
                   />
                 ) : (
                   <div className="pr-8">
-                    <h3 className="font-medium text-gray-900 truncate">
-                      {chat.title}
-                    </h3>
+                    <div className="font-medium text-gray-900 truncate">
+                      {stripMarkdown(chat.title)}
+                    </div>
                     <p className="text-sm text-gray-500 mt-1">
                       {formatDate(chat.updated_at)}
                     </p>
